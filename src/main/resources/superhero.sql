@@ -1,0 +1,67 @@
+# noinspection SqlNoDataSourceInspectionForFile
+
+DROP DATABASE IF EXISTS SUPERHERO;
+CREATE DATABASE IF NOT EXISTS SUPERHERO DEFAULT CHARACTER SET UTF8MB4;
+USE SUPERHERO;
+
+DROP TABLE if exists CITY;
+DROP TABLE if exists SUPERPOWER;
+DROP TABLE if exists SUPERHERO;
+DROP TABLE if exists SUPERHERO_POWERS;
+
+CREATE TABLE CITY (
+	CITY_ID INTEGER NOT NULL AUTO_INCREMENT,
+	NAME VARCHAR(50) NOT NULL,
+	PRIMARY KEY (CITY_ID),
+    UNIQUE INDEX (NAME)
+);
+
+CREATE TABLE SUPERPOWER (
+	POWER_ID INTEGER NOT NULL AUTO_INCREMENT,
+	NAME VARCHAR(50) NOT NULL,
+	PRIMARY KEY (POWER_ID),
+	UNIQUE INDEX (NAME)
+);
+
+CREATE TABLE SUPERHERO (
+	HERO_ID INTEGER NOT NULL AUTO_INCREMENT,
+	HERO_NAME VARCHAR(50) NOT NULL,
+	REAL_NAME VARCHAR(50) NOT NULL,
+	CREATION_YEAR INT,
+	CITY_ID INTEGER,
+	PRIMARY KEY (HERO_ID),
+	FOREIGN KEY (CITY_ID) REFERENCES CITY(CITY_ID),
+    UNIQUE INDEX (HERO_NAME)
+);
+
+CREATE TABLE SUPERHERO_POWERS (
+	HERO_ID INTEGER NOT NULL,
+	POWER_ID INTEGER NOT NULL,
+	LEVEL ENUM ('low', 'medium', 'high'),
+	PRIMARY KEY (HERO_ID, POWER_ID),
+	FOREIGN KEY (HERO_ID) REFERENCES SUPERHERO(HERO_ID),
+	FOREIGN KEY (POWER_ID) REFERENCES SUPERPOWER(POWER_ID)
+);
+
+INSERT into CITY (name) values ('New York');
+INSERT into CITY (name) values ('Gotham City');
+INSERT into CITY (name) values ('Metropolis');
+
+
+INSERT into SUPERPOWER (name) values ('Spind');
+INSERT into SUPERPOWER (name) values ('Superstyrke');
+INSERT into SUPERPOWER (name) values ('Millioner');
+INSERT into SUPERPOWER (name) values ('Magi');
+
+INSERT into SUPERHERO (hero_name, real_name, creation_year, city_id)
+	values('Spider-man', 'Peter Parker', 1962, 1);
+INSERT into SUPERHERO (hero_name, real_name, creation_year, city_id)
+	values('Batman', 'Bruce Wayne', 1939, 2);
+INSERT into SUPERHERO (hero_name, real_name, creation_year, city_id)
+	values('Doctor Strange', 'Dr Stephen Strange', 1963, 1);
+
+INSERT into SUPERHERO_POWERS values (1,1,'high');
+INSERT into SUPERHERO_POWERS values (1,3,'low');
+INSERT into SUPERHERO_POWERS values (2,2,'high');
+INSERT into SUPERHERO_POWERS values (3,4,'high');
+commit;
